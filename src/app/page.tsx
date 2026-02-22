@@ -1,65 +1,57 @@
-import Image from "next/image";
-
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between bg-white px-16 py-32 sm:items-start dark:bg-black">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs font-semibold text-3xl text-black leading-10 tracking-tight dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg text-zinc-600 leading-8 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <main className="min-h-screen px-8 py-16 md:px-16 lg:px-24">
+      <section className="mx-auto max-w-4xl space-y-16">
+        {/* Typography Showcase */}
+        <div className="space-y-8">
+          <h1 className="font-bold font-heading text-5xl md:text-7xl">Space Grotesk</h1>
+          <p className="font-body text-xl leading-relaxed md:text-2xl">
+            This is Outfit, the body font. It&apos;s clean, modern, and highly readable across all
+            sizes. The neo-noir palette creates a cinematic feel with warm off-white text on deep
+            dark blue-grey.
+          </p>
+          <p className="font-cursive text-3xl md:text-4xl">
+            And this is Caveat, for handwritten notes and journal entries...
           </p>
         </div>
-        <div className="flex flex-col gap-4 font-medium text-base sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] md:w-[158px] dark:hover:bg-[#ccc]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-black/[.08] border-solid px-5 transition-colors hover:border-transparent hover:bg-black/[.04] md:w-[158px] dark:border-white/[.145] dark:hover:bg-[#1a1a1a]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+        {/* Color Palette */}
+        <div className="space-y-6">
+          <h2 className="font-heading font-semibold text-3xl">Color Palette</h2>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="space-y-2">
+              <div className="h-24 rounded-lg border border-foreground/20 bg-background" />
+              <p className="font-body text-sm">Background</p>
+              <code className="text-xs opacity-60">oklch(0.16 0.02 255)</code>
+            </div>
+            <div className="space-y-2">
+              <div className="h-24 rounded-lg bg-foreground" />
+              <p className="font-body text-sm">Foreground</p>
+              <code className="text-xs opacity-60">oklch(0.94 0.02 90)</code>
+            </div>
+            <div className="space-y-2">
+              <div className="h-24 rounded-lg bg-accent-cyan" />
+              <p className="font-body text-sm">Accent Cyan</p>
+              <code className="text-xs opacity-60">oklch(0.75 0.14 195)</code>
+            </div>
+            <div className="space-y-2">
+              <div className="h-24 rounded-lg bg-accent-violet" />
+              <p className="font-body text-sm">Accent Violet</p>
+              <code className="text-xs opacity-60">oklch(0.58 0.19 300)</code>
+            </div>
+          </div>
         </div>
-      </main>
-    </div>
+
+        {/* Accent Text Demo */}
+        <div className="space-y-4">
+          <h2 className="font-heading font-semibold text-3xl">Accent Colors in Use</h2>
+          <p className="text-xl">
+            Links and highlights use{" "}
+            <span className="text-accent-cyan">cyan for primary actions</span> and{" "}
+            <span className="text-accent-violet">violet for secondary emphasis</span>.
+          </p>
+        </div>
+      </section>
+    </main>
   );
 }
