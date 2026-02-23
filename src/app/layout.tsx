@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Caveat, Outfit, Space_Grotesk } from "next/font/google";
+import type { ReactNode } from "react";
 import "./globals.css";
 import { MotionProvider } from "@/components/motion-provider";
 
@@ -28,7 +29,7 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: ReactNode;
 }>) {
   return (
     <html lang="en">

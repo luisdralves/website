@@ -1,8 +1,9 @@
+import { MagneticHoverShowcase } from "@/components/magnetic-hover-showcase";
+
 export default function Home() {
   return (
     <main className="min-h-screen px-8 py-16 md:px-16 lg:px-24">
       <section className="mx-auto max-w-4xl space-y-16">
-        {/* Typography Showcase */}
         <div className="space-y-8">
           <h1 className="font-bold font-heading text-5xl md:text-7xl">Space Grotesk</h1>
           <p className="font-body text-xl leading-relaxed md:text-2xl">
@@ -15,7 +16,6 @@ export default function Home() {
           </p>
         </div>
 
-        {/* Color Palette */}
         <div className="space-y-6">
           <h2 className="font-heading font-semibold text-3xl">Color Palette</h2>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -42,7 +42,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Accent Text Demo */}
         <div className="space-y-4">
           <h2 className="font-heading font-semibold text-3xl">Accent Colors in Use</h2>
           <p className="text-xl">
@@ -51,6 +50,8 @@ export default function Home() {
             <span className="text-accent-violet">violet for secondary emphasis</span>.
           </p>
         </div>
+
+        <MagneticHoverShowcase />
       </section>
     </main>
   );
