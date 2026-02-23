@@ -1,3 +1,4 @@
+import { Landing } from "@/app/sections/landing";
 import { MagneticHoverShowcase } from "@/components/magnetic-hover-showcase";
 import { ScrollProgressIndicator } from "@/components/scroll-progress-indicator";
 
@@ -7,20 +8,7 @@ export default function Home() {
       <ScrollProgressIndicator />
 
       <main>
-        <section
-          id="landing"
-          className="flex min-h-screen items-center justify-center px-8 py-16 md:px-16 lg:px-24"
-        >
-          <div className="mx-auto max-w-4xl space-y-8 text-center">
-            <h1 className="font-bold font-heading text-6xl md:text-8xl">Welcome</h1>
-            <p className="font-body text-xl leading-relaxed md:text-2xl">
-              Scroll down to explore the sections and test the progress indicator.
-            </p>
-            <p className="font-cursive text-3xl text-accent-cyan md:text-4xl">
-              Watch the dots on the right...
-            </p>
-          </div>
-        </section>
+        <Landing />
 
         <section id="about" className="min-h-[150vh] px-8 py-16 md:px-16 lg:px-24">
           <div className="mx-auto max-w-4xl space-y-16">

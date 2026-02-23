@@ -36,6 +36,21 @@ export const RadialReveal = ({ targetSection, origin, onComplete }: Props) => {
     clone.style.transform = `translateY(-${clampedScrollY}px)`;
     clone.style.pointerEvents = "none";
 
+    // Reset scroll-animated elements to their initial visual state
+    // Format: data-scroll-animated="property1:value1;property2:value2"
+    clone.querySelectorAll("[data-scroll-animated]").forEach((el) => {
+      const htmlEl = el as HTMLElement | SVGElement;
+      const resetValues = htmlEl.dataset.scrollAnimated;
+      if (resetValues) {
+        resetValues.split(";").forEach((pair) => {
+          const [property, value] = pair.split(":");
+          if (property && value !== undefined) {
+            htmlEl.style.setProperty(property, value);
+          }
+        });
+      }
+    });
+
     overlayRef.current.innerHTML = "";
     overlayRef.current.appendChild(clone);
     setIsReady(true);
