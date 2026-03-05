@@ -53,8 +53,53 @@ export const RadialReveal = ({ targetSection, origin, onComplete }: Props) => {
 
     overlayRef.current.innerHTML = "";
     overlayRef.current.appendChild(clone);
+
     setIsReady(true);
   }, [targetSection]);
+
+  // Continuously sync canvas content during the reveal animation
+  useEffect(() => {
+    if (!isReady || hasCompleted) return;
+
+    const overlay = overlayRef.current;
+    if (!overlay) return;
+
+    // Cache canvas pairs once at effect start
+    const allCanvases = document.querySelectorAll("canvas");
+    const originalCanvases: HTMLCanvasElement[] = [];
+    for (const canvas of allCanvases) {
+      if (!overlay.contains(canvas)) {
+        originalCanvases.push(canvas as HTMLCanvasElement);
+      }
+    }
+    const clonedCanvases = Array.from(overlay.querySelectorAll("canvas")) as HTMLCanvasElement[];
+
+    let animationId: number;
+
+    const syncCanvases = () => {
+      originalCanvases.forEach((original, index) => {
+        const cloned = clonedCanvases[index];
+        if (!cloned || original.width === 0 || original.height === 0) return;
+
+        const clonedCtx = cloned.getContext("2d");
+        if (!clonedCtx) return;
+
+        if (cloned.width !== original.width) cloned.width = original.width;
+        if (cloned.height !== original.height) cloned.height = original.height;
+
+        clonedCtx.clearRect(0, 0, cloned.width, cloned.height);
+        clonedCtx.drawImage(original, 0, 0);
+      });
+
+      animationId = requestAnimationFrame(syncCanvases);
+    };
+
+    animationId = requestAnimationFrame(syncCanvases);
+
+    return () => {
+      cancelAnimationFrame(animationId);
+    };
+  }, [isReady, hasCompleted]);
 
   const maxRadius =
     typeof window !== "undefined"

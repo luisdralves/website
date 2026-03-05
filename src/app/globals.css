@@ -18,6 +18,10 @@
   --font-cursive: var(--font-cursive);
 }
 
+html {
+  overflow-y: overlay;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);

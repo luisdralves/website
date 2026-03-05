@@ -13,7 +13,7 @@ const LogotypePath = ({
   d: string;
   scrollProgress: MotionValue<number>;
 }) => {
-  const strokeDashoffset = useTransform(scrollProgress, [0, 0.6], [0, 1]);
+  const strokeDashoffset = useTransform(scrollProgress, [0, 0.5], [0, 1]);
 
   return (
     <m.path
@@ -33,16 +33,16 @@ type Props = {
   paths: { d: string; key: string }[];
 };
 
-export const LandingClient = ({ paths }: Props) => {
-  const containerRef = useRef<HTMLDivElement>(null);
+export const Logotype = ({ paths }: Props) => {
+  const ref = useRef<HTMLDivElement>(null);
 
   const { scrollYProgress } = useScroll({
-    target: containerRef,
+    target: ref,
     offset: ["start start", "end start"],
   });
 
   return (
-    <div ref={containerRef} className="flex min-h-screen w-full items-center justify-center">
+    <div ref={ref} className="flex min-h-screen w-full items-center justify-center">
       <m.svg
         role="img"
         aria-label="luisdralves"

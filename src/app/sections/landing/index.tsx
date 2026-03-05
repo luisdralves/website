@@ -1,4 +1,5 @@
-import { LandingClient } from "./landing-client";
+import { GeometricElement } from "./geometric-element";
+import { Logotype } from "./logotype";
 
 const letterSegments: Record<string, [number, number, number, number][]> = {
   l: [
@@ -111,8 +112,10 @@ const allPaths = letterLayout.reduce<{ d: string; key: string }[]>(
 
 export const Landing = () => {
   return (
-    <section id="landing">
-      <LandingClient paths={allPaths} />
+    <section id="landing" className="relative flex flex-col">
+      <Logotype paths={allPaths} />
+
+      <GeometricElement />
     </section>
   );
 };

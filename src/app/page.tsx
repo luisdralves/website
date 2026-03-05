@@ -10,7 +10,7 @@ export default function Home() {
       <main>
         <Landing />
 
-        <section id="about" className="min-h-[150vh] px-8 py-16 md:px-16 lg:px-24">
+        <section id="about" className="px-8 py-16 md:px-16 lg:px-24">
           <div className="mx-auto max-w-4xl space-y-16">
             <div className="space-y-8">
               <h2 className="font-bold font-heading text-5xl md:text-7xl">About</h2>
