@@ -16,6 +16,7 @@
   --font-heading: var(--font-heading);
   --font-body: var(--font-body);
   --font-cursive: var(--font-cursive);
+  --font-mono: var(--font-mono);
 }
 
 html {

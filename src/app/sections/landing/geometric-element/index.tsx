@@ -11,7 +11,6 @@ type Props = {
 
 export const GeometricElement = ({ wrapperHeight = "0px", canvasHeight = "100vh" }: Props) => {
   const shouldReduceMotion = useReducedMotion();
-  const isReducedMotion = shouldReduceMotion ?? false;
 
   return (
     <div className="relative w-full overflow-visible" style={{ height: wrapperHeight }}>
@@ -19,7 +18,7 @@ export const GeometricElement = ({ wrapperHeight = "0px", canvasHeight = "100vh"
         className="-z-10 -translate-y-1/2 mask-[linear-gradient(to_bottom,transparent,black_50%,transparent)] absolute inset-x-0 top-1/2"
         style={{ height: canvasHeight }}
       >
-        {isReducedMotion ? <StaticFallback /> : <DynamicCanvas />}
+        {shouldReduceMotion ? <StaticFallback /> : <DynamicCanvas />}
       </div>
     </div>
   );

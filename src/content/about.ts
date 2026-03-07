@@ -1,6 +1,9 @@
 export type AboutContent = {
-  builderPhrases: string[];
-  personalFacts: {
+  builderPhrase: {
+    prefix: string;
+    suffixes: readonly string[];
+  };
+  personalFacts: readonly {
     label: string;
     value: string;
   }[];
@@ -8,14 +11,17 @@ export type AboutContent = {
 };
 
 export const about = {
-  builderPhrases: [
-    "Building systems that connect",
-    "Building to preserve",
-    "Building new ways to see familiar things",
-    "Building community",
-    "Building understanding",
-    "Building a bloated sense of self-importance",
-  ],
+  builderPhrase: {
+    prefix: "Building",
+    suffixes: [
+      " systems that connect",
+      " to preserve",
+      " new ways to see familiar things",
+      " community",
+      " understanding",
+      " a bloated sense of self-importance",
+    ],
+  },
   personalFacts: [
     {
       label: "Location",

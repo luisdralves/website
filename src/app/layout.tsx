@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Caveat, Outfit, Space_Grotesk } from "next/font/google";
+import { Caveat, Courier_Prime, Outfit, Space_Grotesk } from "next/font/google";
 import type { ReactNode } from "react";
 import "./globals.css";
 import { MotionProvider } from "@/components/motion-provider";
@@ -22,6 +22,13 @@ const caveat = Caveat({
   display: "swap",
 });
 
+const courierPrime = Courier_Prime({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-mono",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "luisdralves",
 };
@@ -34,7 +41,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${spaceGrotesk.variable} ${outfit.variable} ${caveat.variable} font-body antialiased`}
+        className={`${spaceGrotesk.variable} ${outfit.variable} ${caveat.variable} ${courierPrime.variable} font-body antialiased`}
       >
         <MotionProvider>{children}</MotionProvider>
       </body>
