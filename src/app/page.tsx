@@ -1,5 +1,6 @@
 import { About } from "@/app/sections/about";
 import { Landing } from "@/app/sections/landing";
+import { Photography } from "@/app/sections/photography";
 import { MagneticHoverShowcase } from "@/components/magnetic-hover-showcase";
 import { ScrollProgressIndicator } from "@/components/scroll-progress-indicator";
 
@@ -54,30 +55,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="photography" className="min-h-[120vh] px-8 py-16 md:px-16 lg:px-24">
-          <div className="mx-auto max-w-4xl space-y-16">
-            <div className="space-y-8">
-              <h2 className="font-bold font-heading text-5xl md:text-7xl">Photography</h2>
-              <p className="font-body text-xl leading-relaxed md:text-2xl">
-                A masonry gallery will be implemented here in Epic 6, featuring integration with
-                Immich for photo management.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
-              {Array.from({ length: 9 }, (_, i) => (
-                <div
-                  key={`photo-placeholder-${i + 1}`}
-                  className={`flex items-center justify-center rounded-lg border border-foreground/10 bg-foreground/5 ${
-                    i % 3 === 0 ? "aspect-3/4" : i % 3 === 1 ? "aspect-square" : "aspect-4/3"
-                  }`}
-                >
-                  <span className="font-body text-sm opacity-40">Photo {i + 1}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+        <Photography />
 
         <section
           id="footer"

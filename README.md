@@ -11,6 +11,20 @@ Despite immensely enjoying thinking about and implementing ideas and personal pr
 - better-sqlite3
 - Biome
 
+## Environment
+
+Copy `.env.example` to `.env` and configure:
+
+| Variable | Description |
+|----------|-------------|
+| `IMMICH_API_URL` | Immich API base URL (e.g., `https://my.immich.app/api`) |
+| `IMMICH_API_KEY` | API key with scopes: `album.read`, `asset.read`, `asset.download` |
+| `IMMICH_ALBUM_ID` | UUID of the album to display in the photography section |
+
+## Server Requirements
+
+- [exiftool](https://exiftool.org/) (image metadata stripping)
+
 ## Development
 
 ```bash

@@ -1,0 +1,19 @@
+import { PhotographyClient } from "./photography-client";
+
+export const Photography = () => {
+  return (
+    <section id="photography" className="min-h-screen px-8 py-16 md:px-16 lg:px-24">
+      <div className="mx-auto max-w-6xl space-y-16">
+        <div className="space-y-8">
+          <h2 className="font-bold font-heading text-5xl md:text-7xl">Photography</h2>
+          <p className="max-w-2xl font-body text-xl leading-relaxed md:text-2xl">
+            Moments captured through the lens.
+          </p>
+        </div>
+      </div>
+      <div className="mx-auto mt-16 max-w-480">
+        <PhotographyClient />
+      </div>
+    </section>
+  );
+};
