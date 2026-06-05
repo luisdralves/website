@@ -62,6 +62,7 @@ export const ScrollProgressIndicator = () => {
                     top: targetElement.offsetTop,
                     behavior: "instant",
                   });
+                  history.replaceState(null, "", `#${sectionId}`);
                 }
                 return;
               }

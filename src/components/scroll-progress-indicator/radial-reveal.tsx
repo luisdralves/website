@@ -120,6 +120,7 @@ export const RadialReveal = ({ targetSection, origin, onComplete }: Props) => {
     if (hasCompleted) return;
     setHasCompleted(true);
     window.scrollTo({ top: targetScrollY, behavior: "instant" });
+    history.replaceState(null, "", `#${targetSection}`);
     requestAnimationFrame(() => onComplete());
   };
 
