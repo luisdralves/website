@@ -1,0 +1,47 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches: [master]
+
+concurrency:
+  group: deploy-website
+  cancel-in-progress: false
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    container:
+      image: docker:latest
+      volumes:
+        - /opt/website:/deploy
+    steps:
+      - name: Install dependencies
+        run: apk add --no-cache git nodejs
+
+      - uses: actions/checkout@v4
+
+      - name: Copy source to deploy directory
+        run: |
+          rm -rf /deploy/build
+          cp -r . /deploy/build
+
+      - name: Create .env file
+        working-directory: /deploy/build
+        run: |
+          cat > .env << 'EOF'
+          HOST_PORT=${{ vars.HOST_PORT }}
+          IMMICH_API_URL=${{ vars.IMMICH_API_URL }}
+          IMMICH_API_KEY=${{ secrets.IMMICH_API_KEY }}
+          IMMICH_ALBUM_ID=${{ vars.IMMICH_ALBUM_ID }}
+          DATA_DIR=/opt/website/data
+          EOF
+
+      - name: Build and deploy
+        working-directory: /deploy/build
+        run: |
+          docker compose build
+          docker compose up -d
+
+      - name: Cleanup
+        run: rm -rf /deploy/build
