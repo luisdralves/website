@@ -7,14 +7,13 @@ FROM oven/bun:1 AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+ARG RATE_MY_SHOTS_URL
+ENV RATE_MY_SHOTS_URL=$RATE_MY_SHOTS_URL
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN bun run build
 
 FROM node:24-slim AS runner
 WORKDIR /app
-RUN apt-get update \
-  && apt-get install -y --no-install-recommends libimage-exiftool-perl \
-  && rm -rf /var/lib/apt/lists/*
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV PORT=3000

@@ -2,14 +2,12 @@ export type PhotoItem = {
   id: string;
   width: number;
   height: number;
-  ext: string;
-  rating: number;
+  eloVerified: number;
   exif: {
-    fNumber: number | null;
-    exposureTime: string | null;
-    iso: number | null;
+    lensDisplayName: string | null;
     focalLength: number | null;
-    model: string | null;
-    lensModel: string | null;
+    fNumber: number | null;
+    exposureTime: number | null;
+    iso: number | null;
   };
 };

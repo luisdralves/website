@@ -2,14 +2,14 @@ name: website
 
 services:
   app:
-    build: .
+    build:
+      context: .
+      args:
+        RATE_MY_SHOTS_URL: ${RATE_MY_SHOTS_URL}
     restart: unless-stopped
     ports:
       - "${HOST_PORT}:3000"
     environment:
-      IMMICH_API_URL: ${IMMICH_API_URL}
-      IMMICH_API_KEY: ${IMMICH_API_KEY}
-      IMMICH_ALBUM_ID: ${IMMICH_ALBUM_ID}
       DATA_DIR: /app/data
     volumes:
       - "${DATA_DIR:-./data}:/app/data"

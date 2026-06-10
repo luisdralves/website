@@ -1,13 +1,19 @@
 "use client";
 
 import { m, useReducedMotion } from "motion/react";
-import Image from "next/image";
 import { useMagneticSpringHover } from "@/hooks/use-magnetic-spring-hover";
 import { springGentle } from "@/lib/motion";
 import type { PhotoItem } from "./types";
 
 type PhotoTileProps = {
   photo: PhotoItem;
+  apiUrl: string;
+};
+
+const formatExposureTime = (s: number): string => {
+  if (s >= 1) return `${s}s`;
+  const denom = Math.round(1 / s);
+  return `1/${denom}s`;
 };
 
 const formatExifLine = (photo: PhotoItem): string | null => {
@@ -16,23 +22,13 @@ const formatExifLine = (photo: PhotoItem): string | null => {
 
   if (exif.focalLength) parts.push(`${exif.focalLength}mm`);
   if (exif.fNumber) parts.push(`ƒ/${exif.fNumber}`);
-  if (exif.exposureTime) parts.push(`${exif.exposureTime}s`);
+  if (exif.exposureTime) parts.push(formatExposureTime(exif.exposureTime));
   if (exif.iso) parts.push(`${exif.iso / 100}\u00A0hISO`);
 
   return parts.length > 0 ? parts.join(" · ") : null;
 };
 
-const formatGearLine = (photo: PhotoItem): string | null => {
-  const { exif } = photo;
-  const parts: string[] = [];
-
-  if (exif.model) parts.push(exif.model);
-  if (exif.lensModel) parts.push(exif.lensModel);
-
-  return parts.length > 0 ? parts.join(" · ") : null;
-};
-
-export const PhotoTile = ({ photo }: PhotoTileProps) => {
+export const PhotoTile = ({ photo, apiUrl }: PhotoTileProps) => {
   const shouldReduceMotion = useReducedMotion();
   const hover = useMagneticSpringHover<HTMLDivElement>({
     magnetStrength: 0.15,
@@ -41,8 +37,8 @@ export const PhotoTile = ({ photo }: PhotoTileProps) => {
   });
 
   const exifLine = formatExifLine(photo);
-  const gearLine = formatGearLine(photo);
-  const hasOverlay = exifLine || gearLine;
+  const lensName = photo.exif.lensDisplayName;
+  const hasOverlay = exifLine || lensName;
 
   return (
     <m.div
@@ -56,24 +52,24 @@ export const PhotoTile = ({ photo }: PhotoTileProps) => {
       {...hover.handlers}
     >
       <a
-        href={`/photos/${photo.id}.${photo.ext}`}
+        href={`${apiUrl}/assets/${photo.id}`}
         target="_blank"
         rel="noopener noreferrer"
         className="block cursor-pointer"
       >
-        <Image
-          src={`/photos/${photo.id}.${photo.ext}`}
-          alt="Photograph without description (sorry)"
+        {/* biome-ignore lint/performance/noImgElement: thumbnails are pre-optimized upstream */}
+        <img
+          src={`${apiUrl}/img/${photo.id}?size=preview`}
+          alt=""
           width={photo.width}
           height={photo.height}
-          sizes="(max-width: 639px) 100vw, (max-width: 767px) 50vw, (max-width: 1023px) 33vw, 480px"
-          className="w-full"
           loading="lazy"
+          className="w-full"
         />
         {hasOverlay && (
-          <div className="pointer-events-none absolute inset-0 flex flex-col justify-end bg-linear-to-t from-black/70 via-black/20 to-transparent p-3 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
-            {exifLine && <p className="font-mono text-white/90 text-xs">{exifLine}</p>}
-            {gearLine && <p className="font-mono text-white/60 text-xs">{gearLine}</p>}
+          <div className="pointer-events-none absolute inset-0 flex flex-col justify-end gap-1 bg-linear-to-t from-black/70 via-black/20 to-transparent p-3 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+            {lensName && <p className="font-mono text-white/90 text-xs">{lensName}</p>}
+            {exifLine && <p className="font-mono text-white/60 text-xs">{exifLine}</p>}
           </div>
         )}
       </a>

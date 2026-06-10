@@ -1,6 +1,9 @@
 import { PhotographyClient } from "./photography-client";
 
 export const Photography = () => {
+  const apiUrl = process.env.RATE_MY_SHOTS_URL;
+  if (!apiUrl) throw new Error("Missing required env var: RATE_MY_SHOTS_URL");
+
   return (
     <section id="photography" className="min-h-screen px-8 py-16 md:px-16 lg:px-24">
       <div className="mx-auto max-w-6xl space-y-16">
@@ -12,7 +15,7 @@ export const Photography = () => {
         </div>
       </div>
       <div className="mx-auto mt-16 max-w-480">
-        <PhotographyClient />
+        <PhotographyClient apiUrl={apiUrl} />
       </div>
     </section>
   );

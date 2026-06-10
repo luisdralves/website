@@ -31,9 +31,7 @@ jobs:
         run: |
           cat > .env << 'EOF'
           HOST_PORT=${{ vars.HOST_PORT }}
-          IMMICH_API_URL=${{ vars.IMMICH_API_URL }}
-          IMMICH_API_KEY=${{ secrets.IMMICH_API_KEY }}
-          IMMICH_ALBUM_ID=${{ vars.IMMICH_ALBUM_ID }}
+          RATE_MY_SHOTS_URL=${{ vars.RATE_MY_SHOTS_URL }}
           DATA_DIR=/opt/website/data
           EOF
 
