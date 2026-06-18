@@ -1,4 +1,5 @@
 import { PhotographyClient } from "./photography-client";
+import { VoiceCta } from "./voice-cta";
 
 export const Photography = () => {
   const apiUrl = process.env.RATE_MY_SHOTS_URL;
@@ -12,6 +13,7 @@ export const Photography = () => {
           <p className="max-w-2xl font-body text-xl leading-relaxed md:text-2xl">
             Moments captured through the lens.
           </p>
+          <VoiceCta url={apiUrl} />
         </div>
       </div>
       <div className="mx-auto mt-16 max-w-480">

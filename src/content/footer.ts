@@ -16,7 +16,7 @@ export const footer = {
     },
     {
       platform: "Gitea",
-      url: "https://gitea.bate-estacas.xyz/luis",
+      url: "https://gitea.luisdralves.dev/luis",
     },
     {
       platform: "LinkedIn",

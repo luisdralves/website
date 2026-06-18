@@ -24,24 +24,28 @@ export const about = {
   },
   personalFacts: [
     {
-      label: "Location",
-      value: "Viana do Castelo, Portugal",
+      label: "Based in",
+      value: "Viana do Castelo, Portugal. Looking to relocate.",
     },
     {
-      label: "Homelab",
-      value: "15+ services on hardware I control",
+      label: "Internationally known",
+      value: "Volunteered in rural Bulgaria, until COVID interrupted me",
     },
     {
-      label: "Side project",
-      value: "Cataloguing my father's coin collection in 3D",
-    },
-    {
-      label: "Non-profit",
+      label: "NGO",
       value: "President of a youth organization",
     },
     {
+      label: "Soapbox",
+      value: "Cities would be better with fewer cars and more transit",
+    },
+    {
       label: "Languages",
-      value: "Portuguese (native), English (fluent), Dutch (WIP)",
+      value: "🇵🇹 Portuguese (native), 🇬🇧 English (fluent), 🇳🇱 Dutch (learning)",
+    },
+    {
+      label: "Off the clock",
+      value: "Board games, hiking, photography",
     },
   ],
   transitionalStatement: "Easier to show than tell.",

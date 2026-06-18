@@ -3,6 +3,7 @@
 import { m } from "motion/react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import useSWRInfinite from "swr/infinite";
+import ArrowUpRightIcon from "@/components/icons/arrow-up-right.svg";
 import { useMagneticSpringHover } from "@/hooks/use-magnetic-spring-hover";
 import { PhotoTile } from "./photo-tile";
 import type { PhotoItem } from "./types";
@@ -188,9 +189,10 @@ export const PhotographyClient = ({ apiUrl }: PhotographyClientProps) => {
             href={`${apiUrl}/gallery`}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block rounded-lg border border-accent-cyan/40 px-6 py-3 font-body text-accent-cyan text-base transition-colors hover:border-accent-cyan/70 hover:bg-accent-cyan/10"
+            className="inline-flex cursor-pointer items-center gap-3 rounded-full border border-foreground/15 bg-foreground/3 px-6 py-3 font-heading text-lg backdrop-blur-sm"
           >
-            See the rest of the portfolio
+            <span>See the rest of the portfolio</span>
+            <ArrowUpRightIcon className="size-5 text-foreground/60" />
           </m.a>
         </div>
       )}

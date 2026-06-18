@@ -2,14 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-export const SECTION_IDS = [
-  "landing",
-  "about",
-  "projects",
-  "travel",
-  "photography",
-  "footer",
-] as const;
+export const SECTION_IDS = ["landing", "about", "projects", "photography", "footer"] as const;
 
 export type SectionId = (typeof SECTION_IDS)[number];
 
@@ -17,7 +10,6 @@ export const SECTION_LABELS: Record<SectionId, string> = {
   landing: "Landing",
   about: "About",
   projects: "Projects",
-  travel: "Travel",
   photography: "Photography",
   footer: "Footer",
 };

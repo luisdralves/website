@@ -15,8 +15,8 @@
   --color-accent-violet: var(--accent-violet);
   --font-heading: var(--font-heading);
   --font-body: var(--font-body);
-  --font-cursive: var(--font-cursive);
   --font-mono: var(--font-mono);
+  --breakpoint-desktop: 60rem;
 }
 
 html {
