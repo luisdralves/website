@@ -91,5 +91,11 @@ export const HandwrittenStatement = ({
     }
   });
 
-  return <div ref={containerRef} className="flex justify-center text-accent-cyan" />;
+  return (
+    <div ref={containerRef} className="flex justify-center text-accent-cyan">
+      <noscript>
+        <p className="text-center font-body text-2xl italic">{text}</p>
+      </noscript>
+    </div>
+  );
 };

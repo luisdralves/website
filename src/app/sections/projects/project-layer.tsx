@@ -52,6 +52,7 @@ export const ProjectLayer = ({
   return (
     <m.div
       style={layerStyle}
+      data-project-layer
       className="absolute inset-0 flex items-center desktop:px-16 px-8 lg:px-24"
     >
       <div className="mx-auto grid w-full max-w-7xl desktop:grid-cols-2 grid-cols-1 items-center desktop:gap-12 gap-10 lg:gap-20">
@@ -71,6 +72,7 @@ export const ProjectLayer = ({
             localProgress={localProgress}
             priority={index === 0}
             sideSign={visualSideSign}
+            active={active}
           />
         </div>
       </div>

@@ -3,7 +3,9 @@ export type FooterContent = {
     platform: string;
     url: string;
   }[];
+  totalVisitsLabel: string;
   counterPrompt: string;
+  excessClickMessage: string;
   rateLimitMessage: string;
   errorMessage: string;
 };
@@ -22,8 +24,14 @@ export const footer = {
       platform: "LinkedIn",
       url: "https://linkedin.com/in/luisdralves",
     },
+    {
+      platform: "CV",
+      url: "/luisdralves-cv.pdf",
+    },
   ],
+  totalVisitsLabel: "Total visits:",
   counterPrompt: "Please kindly increase the counter before you leave.",
+  excessClickMessage: "Please don't increase it too much.",
   rateLimitMessage: "Slow down there, speedster.",
   errorMessage: "Counter is taking a nap.",
 } as const satisfies FooterContent;

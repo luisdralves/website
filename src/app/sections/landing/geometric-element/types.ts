@@ -1,13 +1,16 @@
 export type Point = {
   id: number;
-  baseX: number;
-  baseY: number;
+  /** Normalized base position [0, 1] — multiplied by canvas dimensions at frame time. */
+  nx: number;
+  ny: number;
   driftPhaseX: number;
   driftPhaseY: number;
   driftSpeedX: number;
   driftSpeedY: number;
+  /** Current position in canvas-relative pixels. */
   x: number;
   y: number;
+  /** Physics state, all in canvas pixels / pixels-per-second. */
   velocityX: number;
   velocityY: number;
   targetOffsetX: number;

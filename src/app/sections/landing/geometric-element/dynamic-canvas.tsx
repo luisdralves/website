@@ -61,26 +61,16 @@ export const DynamicCanvas = () => {
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       }
 
-      const scaleX = rect.width / 1000;
-      const scaleY = rect.height / 500;
+      const minDim = Math.min(rect.width, rect.height);
 
-      updatePoints(
-        points,
-        elapsed,
-        deltaTime,
-        cursorRef.current,
-        rect,
-        scaleX,
-        scaleY,
-        isTouchDevice,
-      );
+      updatePoints(points, elapsed, deltaTime, cursorRef.current, rect, isTouchDevice);
 
       const currentEdges = findCurrentEdges(points);
       updateEdges(edges, currentEdges, deltaTime);
 
       ctx.clearRect(0, 0, rect.width, rect.height);
-      drawEdges(ctx, edges, points, scaleX, scaleY);
-      drawPoints(ctx, points, scaleX, scaleY);
+      drawEdges(ctx, edges, points, minDim);
+      drawPoints(ctx, points);
 
       animationId = requestAnimationFrame(animate);
     };

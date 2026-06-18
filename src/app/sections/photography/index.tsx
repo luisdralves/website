@@ -18,6 +18,9 @@ export const Photography = () => {
       </div>
       <div className="mx-auto mt-16 max-w-480">
         <PhotographyClient apiUrl={apiUrl} />
+        <noscript>
+          <p className="text-center font-body text-foreground/60">This one really needs JS.</p>
+        </noscript>
       </div>
     </section>
   );

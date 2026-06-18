@@ -12,6 +12,19 @@ const nextConfig: NextConfig = {
       },
     },
   },
+  async headers() {
+    return [
+      {
+        source: "/:path*.pdf",
+        headers: [
+          {
+            key: "Content-Disposition",
+            value: "inline",
+          },
+        ],
+      },
+    ];
+  },
 };
 
 export default nextConfig;

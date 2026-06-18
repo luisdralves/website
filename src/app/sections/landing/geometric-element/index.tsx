@@ -19,6 +19,11 @@ export const GeometricElement = ({ wrapperHeight = "0px", canvasHeight = "100vh"
         style={{ height: canvasHeight }}
       >
         {shouldReduceMotion ? <StaticFallback /> : <DynamicCanvas />}
+        <noscript>
+          <div className="absolute inset-0">
+            <StaticFallback />
+          </div>
+        </noscript>
       </div>
     </div>
   );

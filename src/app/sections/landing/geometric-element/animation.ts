@@ -1,9 +1,10 @@
 import {
   BLUE,
   CYAN,
-  DRIFT_AMOUNT,
+  DRIFT_RATIO,
   EDGE_APPEAR_SPEED,
   EDGE_DISAPPEAR_SPEED,
+  EDGE_FADE_RATIO,
   NEIGHBORS,
   PROXIMITY_THRESHOLD,
   REPEL_STRENGTH,
@@ -22,20 +23,23 @@ export const updatePoints = (
   deltaTime: number,
   cursor: Cursor,
   rect: DOMRect,
-  scaleX: number,
-  scaleY: number,
   isTouchDevice: boolean,
 ) => {
+  const minDim = Math.min(rect.width, rect.height);
+  const driftAmount = DRIFT_RATIO * minDim;
+
   for (const point of points) {
-    const driftX = Math.sin(elapsed * point.driftSpeedX + point.driftPhaseX) * DRIFT_AMOUNT;
-    const driftY = Math.sin(elapsed * point.driftSpeedY + point.driftPhaseY) * DRIFT_AMOUNT;
+    const baseX = point.nx * rect.width;
+    const baseY = point.ny * rect.height;
+    const driftX = Math.sin(elapsed * point.driftSpeedX + point.driftPhaseX) * driftAmount;
+    const driftY = Math.sin(elapsed * point.driftSpeedY + point.driftPhaseY) * driftAmount;
 
     point.targetOffsetX = 0;
     point.targetOffsetY = 0;
 
     if (!isTouchDevice && cursor.x !== 0) {
-      const pointScreenX = rect.left + (point.baseX + driftX) * scaleX;
-      const pointScreenY = rect.top + (point.baseY + driftY) * scaleY;
+      const pointScreenX = rect.left + baseX + driftX;
+      const pointScreenY = rect.top + baseY + driftY;
       const dx = cursor.x - pointScreenX;
       const dy = cursor.y - pointScreenY;
       const distance = Math.sqrt(dx * dx + dy * dy);
@@ -57,8 +61,8 @@ export const updatePoints = (
     point.currentOffsetX += point.velocityX * deltaTime;
     point.currentOffsetY += point.velocityY * deltaTime;
 
-    point.x = point.baseX + driftX + point.currentOffsetX;
-    point.y = point.baseY + driftY + point.currentOffsetY;
+    point.x = baseX + driftX + point.currentOffsetX;
+    point.y = baseY + driftY + point.currentOffsetY;
   }
 };
 
@@ -89,7 +93,6 @@ export const updateEdges = (
   currentEdges: Set<string>,
   deltaTime: number,
 ) => {
-  // Mark edges that should disappear
   for (const [key, edge] of edges) {
     if (!currentEdges.has(key) && edge.phase !== EdgePhase.Disappearing) {
       edge.phase = EdgePhase.Disappearing;
@@ -97,7 +100,6 @@ export const updateEdges = (
     }
   }
 
-  // Add new edges or resurrect disappearing ones
   for (const key of currentEdges) {
     const existing = edges.get(key);
     if (!existing) {
@@ -109,7 +111,6 @@ export const updateEdges = (
     }
   }
 
-  // Animate edges and remove fully disappeared ones
   const toRemove: string[] = [];
   for (const [key, edge] of edges) {
     if (edge.phase === EdgePhase.Appearing) {
@@ -155,36 +156,33 @@ export const drawEdges = (
   ctx: CanvasRenderingContext2D,
   edges: Map<string, EdgeState>,
   points: Point[],
-  scaleX: number,
-  scaleY: number,
+  minDim: number,
 ) => {
   ctx.lineWidth = 1;
+  const maxDist = EDGE_FADE_RATIO * minDim;
 
   for (const [, edge] of edges) {
     const p1 = points[edge.id1];
     const p2 = points[edge.id2];
 
-    const x1 = p1.x * scaleX;
-    const y1 = p1.y * scaleY;
-    const x2 = p2.x * scaleX;
-    const y2 = p2.y * scaleY;
+    const x1 = p1.x;
+    const y1 = p1.y;
+    const x2 = p2.x;
+    const y2 = p2.y;
 
     const cx = (x1 + x2) / 2;
     const cy = (y1 + y2) / 2;
 
     const dist = Math.sqrt((p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2);
-    const maxDist = 200;
     const baseOpacity = Math.max(0, 1 - dist / maxDist) * 0.6;
     const color = getEdgeColor(edge.id1, edge.id2);
 
     if (edge.phase === EdgePhase.Appearing) {
       const t = edge.progress;
 
-      // First half: draw from p1 towards center
       const seg1End = Math.min(t * 2, 1);
       drawLine(ctx, x1, y1, x1 + (cx - x1) * seg1End, y1 + (cy - y1) * seg1End, color, baseOpacity);
 
-      // Second half: draw from p2 towards center
       if (t > 0.5) {
         const seg2End = (t - 0.5) * 2;
         drawLine(
@@ -204,7 +202,6 @@ export const drawEdges = (
       const dirY = len > 0 ? (y2 - y1) / len : 0;
 
       if (t < 0.5) {
-        // First half: gap grows from center
         const gapSize = t * 2;
         const halfLen = Math.sqrt((cx - x1) ** 2 + (cy - y1) ** 2);
         const gapHalf = halfLen * gapSize;
@@ -212,7 +209,6 @@ export const drawEdges = (
         drawLine(ctx, x1, y1, cx - dirX * gapHalf, cy - dirY * gapHalf, color, baseOpacity);
         drawLine(ctx, cx + dirX * gapHalf, cy + dirY * gapHalf, x2, y2, color, baseOpacity);
       } else {
-        // Second half: segments shrink and fade
         const shrink = (t - 0.5) * 2;
         const fadeOpacity = baseOpacity * (1 - shrink);
 
@@ -236,25 +232,17 @@ export const drawEdges = (
         );
       }
     } else {
-      // Visible - draw full line
       drawLine(ctx, x1, y1, x2, y2, color, baseOpacity);
     }
   }
 };
 
-export const drawPoints = (
-  ctx: CanvasRenderingContext2D,
-  points: Point[],
-  scaleX: number,
-  scaleY: number,
-) => {
+export const drawPoints = (ctx: CanvasRenderingContext2D, points: Point[]) => {
   for (const point of points) {
-    const x = point.x * scaleX;
-    const y = point.y * scaleY;
     const color = point.id % 2 === 0 ? CYAN : VIOLET;
     ctx.fillStyle = `rgb(${color.r}, ${color.g}, ${color.b})`;
     ctx.beginPath();
-    ctx.arc(x, y, 2, 0, Math.PI * 2);
+    ctx.arc(point.x, point.y, 2, 0, Math.PI * 2);
     ctx.fill();
   }
 };

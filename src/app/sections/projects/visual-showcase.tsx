@@ -67,9 +67,10 @@ type VisualShowcaseProps = {
   localProgress: MotionValue<number>;
   priority?: boolean;
   sideSign: -1 | 1;
+  active: boolean;
 };
 
-const renderMedia = (item: ProjectMedia, priority: boolean) => {
+const renderMedia = (item: ProjectMedia, priority: boolean, active: boolean) => {
   switch (item.type) {
     case "image":
       return (
@@ -96,6 +97,20 @@ const renderMedia = (item: ProjectMedia, priority: boolean) => {
         />
       );
     case "iframe":
+      if (!active) {
+        return (
+          <noscript>
+            <a
+              href={item.src}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="flex size-full items-center justify-center bg-foreground/[0.04] font-mono text-foreground/60 text-sm"
+            >
+              Open live demo →
+            </a>
+          </noscript>
+        );
+      }
       if (item.simulatedWidth) {
         return (
           <ScaledIframe
@@ -131,6 +146,7 @@ export const VisualShowcase = ({
   localProgress,
   priority = false,
   sideSign,
+  active,
 }: VisualShowcaseProps) => {
   const bodyProgress = useTransform(localProgress, [VISUAL_BODY.start, VISUAL_BODY.end], [0, 1], {
     clamp: true,
@@ -188,7 +204,7 @@ export const VisualShowcase = ({
             transition={{ duration: 0.55, ease: [0.22, 0.61, 0.36, 1] }}
             className="absolute inset-0"
           >
-            {renderMedia(item, priority)}
+            {renderMedia(item, priority, active)}
           </m.div>
         </AnimatePresence>
         <div

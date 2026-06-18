@@ -5,25 +5,27 @@ const seededRandom = (seed: number) => {
   return x - Math.floor(x);
 };
 
+/** Inset from each edge in normalized space — keeps drifting points off the rim. */
+const EDGE_PADDING = 0.05;
+
 export const generatePoints = (): Point[] => {
   const points: Point[] = [];
   const numPoints = 40;
 
   for (let i = 0; i < numPoints; i++) {
     const rand = (offset: number) => seededRandom(i * 100 + offset);
-    const baseX = 50 + rand(1) * 900;
-    const baseY = 30 + rand(2) * 440;
+    const span = 1 - 2 * EDGE_PADDING;
 
     points.push({
       id: i,
-      baseX,
-      baseY,
+      nx: EDGE_PADDING + rand(1) * span,
+      ny: EDGE_PADDING + rand(2) * span,
       driftPhaseX: rand(3) * Math.PI * 2,
       driftPhaseY: rand(4) * Math.PI * 2,
       driftSpeedX: 0.00015 + rand(5) * 0.00025,
       driftSpeedY: 0.00015 + rand(6) * 0.00025,
-      x: baseX,
-      y: baseY,
+      x: 0,
+      y: 0,
       velocityX: 0,
       velocityY: 0,
       targetOffsetX: 0,

@@ -34,7 +34,7 @@ type Props = {
 };
 
 export const Logotype = ({ paths }: Props) => {
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLHeadingElement>(null);
 
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -42,10 +42,10 @@ export const Logotype = ({ paths }: Props) => {
   });
 
   return (
-    <div ref={ref} className="flex min-h-screen w-full items-center justify-center">
+    <h1 ref={ref} className="m-0 flex min-h-screen w-full items-center justify-center">
+      <span className="sr-only">luisdralves</span>
       <m.svg
-        role="img"
-        aria-label="luisdralves"
+        aria-hidden="true"
         viewBox="-0.5 -0.5 49 11"
         className="w-[90vw] max-w-6xl text-foreground"
         fill="none"
@@ -58,6 +58,6 @@ export const Logotype = ({ paths }: Props) => {
           <LogotypePath key={key} d={d} scrollProgress={scrollYProgress} />
         ))}
       </m.svg>
-    </div>
+    </h1>
   );
 };
