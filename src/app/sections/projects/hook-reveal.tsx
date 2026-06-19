@@ -2,10 +2,12 @@
 
 import type { MotionValue } from "motion/react";
 import { HookWord } from "./hook-word";
+import type { Anchors } from "./lifecycle";
 
 type HookRevealProps = {
   text: string;
   localProgress: MotionValue<number>;
+  anchors: Anchors;
 };
 
 type Token = { kind: "word"; text: string; wordIndex: number } | { kind: "space"; text: string };
@@ -24,7 +26,7 @@ const tokenize = (text: string): { tokens: Token[]; wordCount: number } => {
   return { tokens, wordCount: wordIndex };
 };
 
-export const HookReveal = ({ text, localProgress }: HookRevealProps) => {
+export const HookReveal = ({ text, localProgress, anchors }: HookRevealProps) => {
   const { tokens, wordCount } = tokenize(text);
 
   return (
@@ -42,6 +44,7 @@ export const HookReveal = ({ text, localProgress }: HookRevealProps) => {
             index={token.wordIndex}
             total={wordCount}
             localProgress={localProgress}
+            anchors={anchors}
           />
         );
       })}

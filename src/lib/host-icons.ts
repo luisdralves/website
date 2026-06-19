@@ -1,5 +1,4 @@
 import type { FC, SVGProps } from "react";
-import DocumentIcon from "@/components/icons/document.svg";
 import GiteaIcon from "@/components/icons/gitea.svg";
 import GitHubIcon from "@/components/icons/github.svg";
 import SourceIcon from "@/components/icons/source.svg";
@@ -21,10 +20,6 @@ export type HostInfo = {
 };
 
 export const resolveHost = (url: string): HostInfo => {
-  if (url.toLowerCase().endsWith(".pdf")) {
-    return { name: "Document", Icon: DocumentIcon };
-  }
-
   let hostname: string;
   try {
     hostname = new URL(url).hostname.toLowerCase();

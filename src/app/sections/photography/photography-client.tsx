@@ -5,6 +5,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import useSWRInfinite from "swr/infinite";
 import ArrowUpRightIcon from "@/components/icons/arrow-up-right.svg";
 import { useMagneticSpringHover } from "@/hooks/use-magnetic-spring-hover";
+import { PhotoModal } from "./photo-modal";
 import { PhotoTile } from "./photo-tile";
 import type { PhotoItem } from "./types";
 
@@ -100,6 +101,7 @@ export const PhotographyClient = ({ apiUrl }: PhotographyClientProps) => {
   const [columnCount, setColumnCount] = useState(MIN_COLUMNS);
   const [columnWidth, setColumnWidth] = useState(0);
   const [gap, setGap] = useState(GAP_DESKTOP);
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const cacheRef = useRef<ColumnCache | null>(null);
 
   const ctaHover = useMagneticSpringHover<HTMLAnchorElement>({
@@ -123,6 +125,14 @@ export const PhotographyClient = ({ apiUrl }: PhotographyClientProps) => {
   const upstreamHasMore = data?.[data.length - 1]?.hasMore ?? true;
   const reachedCap = (data?.length ?? 0) >= MAX_PAGES;
   const autoLoad = upstreamHasMore && !reachedCap;
+
+  const indexById = useMemo(() => {
+    const map = new Map<string, number>();
+    photos.forEach((p, i) => {
+      map.set(p.id, i);
+    });
+    return map;
+  }, [photos]);
 
   const columns = useMemo(() => {
     const result = assignPhotosToColumns(cacheRef.current, photos, columnCount, columnWidth, gap);
@@ -174,12 +184,24 @@ export const PhotographyClient = ({ apiUrl }: PhotographyClientProps) => {
         {columns.map((column, colIdx) => (
           <div key={`${colIdx}/${columnCount}`} className="flex flex-col" style={{ gap }}>
             {column.photos.map((photo) => (
-              <PhotoTile key={photo.id} photo={photo} apiUrl={apiUrl} />
+              <PhotoTile
+                key={photo.id}
+                photo={photo}
+                apiUrl={apiUrl}
+                onSelect={() => setSelectedIndex(indexById.get(photo.id) ?? 0)}
+              />
             ))}
           </div>
         ))}
         {autoLoad && <div ref={loadMoreRef} className="col-span-full h-1" />}
       </div>
+      <PhotoModal
+        photos={photos}
+        selectedIndex={selectedIndex}
+        apiUrl={apiUrl}
+        onClose={() => setSelectedIndex(null)}
+        onSelectIndex={setSelectedIndex}
+      />
       {reachedCap && upstreamHasMore && (
         <div className="mt-8 flex justify-center">
           <m.a

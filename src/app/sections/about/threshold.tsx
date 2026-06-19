@@ -22,12 +22,12 @@ export const Threshold = ({ children }: ThresholdProps) => {
 
   const clipPath = useTransform(
     scrollYProgress,
-    [0, 1],
+    [0, 0.6],
     ["inset(0 50% 0 50%)", "inset(0 0% 0 0%)"],
   );
-  const leftEdge = useTransform(scrollYProgress, [0, 1], ["50%", "0%"]);
-  const rightEdge = useTransform(scrollYProgress, [0, 1], ["50%", "100%"]);
-  const edgeOpacity = useTransform(scrollYProgress, [0, 0.12, 0.88, 1], [0, 1, 1, 0]);
+  const leftEdge = useTransform(scrollYProgress, [0, 0.6], ["50%", "0%"]);
+  const rightEdge = useTransform(scrollYProgress, [0, 0.6], ["50%", "100%"]);
+  const edgeOpacity = useTransform(scrollYProgress, [0, 0.08, 0.5, 0.6], [0, 1, 1, 0]);
 
   return (
     <div ref={ref} className="relative">

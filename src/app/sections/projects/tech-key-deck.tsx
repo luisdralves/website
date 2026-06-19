@@ -1,12 +1,13 @@
 "use client";
 
-import { backOut, easeIn, easeOut, type MotionValue, m, useTransform } from "motion/react";
-import { linear, PHASES, stagger } from "./lifecycle";
+import { backOut, easeInOut, type MotionValue, m, useTransform } from "motion/react";
+import { type Anchors, linear, phaseFor, stagger } from "./lifecycle";
 import { TechKey } from "./tech-key";
 
 type TechKeyDeckProps = {
   techStack: readonly string[];
   localProgress: MotionValue<number>;
+  anchors: Anchors;
 };
 
 type TechKeyWrapperProps = {
@@ -14,29 +15,30 @@ type TechKeyWrapperProps = {
   index: number;
   total: number;
   localProgress: MotionValue<number>;
+  anchors: Anchors;
 };
 
-const TechKeyWrapper = ({ techKey, index, total, localProgress }: TechKeyWrapperProps) => {
-  const phase = stagger(PHASES.techKeys, index, total, 0.6, true);
+const TechKeyWrapper = ({ techKey, index, total, localProgress, anchors }: TechKeyWrapperProps) => {
+  const phase = stagger(phaseFor("techKeys", anchors), index, total, 0.6, true);
   const { enterStart, enterEnd, exitStart, exitEnd } = phase;
 
   const opacity = useTransform(
     localProgress,
     [enterStart, enterEnd, exitStart, exitEnd],
     [0, 1, 1, 0],
-    { ease: [easeOut, linear, easeIn] },
+    { ease: [easeInOut, linear, easeInOut] },
   );
   const y = useTransform(
     localProgress,
     [enterStart, enterEnd, exitStart, exitEnd],
     [-140, 0, 0, 140],
-    { ease: [backOut, linear, easeIn] },
+    { ease: [backOut, linear, easeInOut] },
   );
   const rotate = useTransform(
     localProgress,
     [enterStart, enterEnd, exitStart, exitEnd],
     [index % 2 === 0 ? -18 : 18, 0, 0, index % 2 === 0 ? -32 : 32],
-    { ease: [backOut, linear, easeIn] },
+    { ease: [backOut, linear, easeInOut] },
   );
 
   return (
@@ -46,7 +48,7 @@ const TechKeyWrapper = ({ techKey, index, total, localProgress }: TechKeyWrapper
   );
 };
 
-export const TechKeyDeck = ({ techStack, localProgress }: TechKeyDeckProps) => {
+export const TechKeyDeck = ({ techStack, localProgress, anchors }: TechKeyDeckProps) => {
   return (
     <div className="flex flex-wrap items-center gap-2 pt-2">
       {techStack.map((tech, i) => (
@@ -56,6 +58,7 @@ export const TechKeyDeck = ({ techStack, localProgress }: TechKeyDeckProps) => {
           index={i}
           total={techStack.length}
           localProgress={localProgress}
+          anchors={anchors}
         />
       ))}
     </div>

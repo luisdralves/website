@@ -1,11 +1,14 @@
 "use client";
 
 import { m, type Variants } from "motion/react";
+import ArrowUpRightIcon from "@/components/icons/arrow-up-right.svg";
+import DocumentIcon from "@/components/icons/document.svg";
 import { useMagneticSpringHover } from "@/hooks/use-magnetic-spring-hover";
 
 type Fact = {
   label: string;
   value: string;
+  cta?: { label: string; href: string };
 };
 
 type FactsRevealProps = {
@@ -31,6 +34,30 @@ const itemVariants: Variants = {
   },
 };
 
+const FactCta = ({ cta }: { cta: NonNullable<Fact["cta"]> }) => {
+  const hover = useMagneticSpringHover<HTMLAnchorElement>({
+    magnetStrength: 0.18,
+    scaleAmount: 1.04,
+    shadowElevation: 10,
+  });
+
+  return (
+    <m.a
+      ref={hover.ref}
+      href={cta.href}
+      target="_blank"
+      rel="noreferrer noopener"
+      style={hover.style}
+      {...hover.handlers}
+      className="group mt-3 inline-flex cursor-pointer items-center gap-2 rounded-full border border-foreground/15 bg-foreground/3 px-4 py-2 font-heading text-base backdrop-blur-sm"
+    >
+      <DocumentIcon className="size-4" />
+      <span>{cta.label}</span>
+      <ArrowUpRightIcon className="group-hover:-translate-y-0.5 size-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
+    </m.a>
+  );
+};
+
 const FactItem = ({ fact }: { fact: Fact }) => {
   const hover = useMagneticSpringHover<HTMLDivElement>({
     magnetStrength: 0.12,
@@ -48,6 +75,7 @@ const FactItem = ({ fact }: { fact: Fact }) => {
       >
         <p className="font-body text-sm uppercase tracking-wider opacity-60">{fact.label}</p>
         <p className="font-body text-lg">{fact.value}</p>
+        {fact.cta && <FactCta cta={fact.cta} />}
       </m.div>
     </m.div>
   );

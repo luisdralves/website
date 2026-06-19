@@ -1,22 +1,17 @@
 "use client";
 
 import { useScroll } from "motion/react";
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import type { Project } from "@/content/projects";
-import { MAX_ENTER_END, MIN_EXIT_START } from "./lifecycle";
+import { type Anchors, anchorsFor, peakProgressFor } from "./lifecycle";
 import { ProjectLayer } from "./project-layer";
 
-const BASE_VH = 160;
-const EXTRA_VH = 80;
-const OVERLAP_VH = 40;
-/**
- * Pre-/post-engagement zones, in vh. Equal to one viewport (sticky engages when
- * section.top reaches viewport.top, disengages when section.bottom reaches viewport.bottom).
- * Used to allocate scroll space for the first project's entrance and the last project's exit
- * so that their per-element choreography plays exactly across the section's approach/departure.
- */
-const PRE_BUFFER_VH = 150;
-const POST_BUFFER_VH = 150;
+// All values are in viewports (1.0 = 100vh). Dimensionless ratios.
+const BASE = 0.95;
+const EXTRA = 0.6;
+const OVERLAP = 0.2;
+const PRE_BUFFER = 1.5;
+const POST_BUFFER = 1.5;
 
 type ProjectsStageProps = {
   projects: readonly Project[];
@@ -27,48 +22,83 @@ type LayerRange = {
   outputRange: number[];
 };
 
+type Snap = {
+  topVh: number;
+  label: string;
+};
+
 type Layout = {
   layers: LayerRange[];
+  anchors: Anchors[];
   sectionVh: number;
+  snaps: Snap[];
+};
+
+/**
+ * Invert a layer's piecewise-linear local-progress map back to a widened coordinate (in viewports).
+ * Mid projects use a single linear segment; first/last projects have a knot at
+ * (preBuffer, pFirst) / (totalWidened - postBuffer, pLast).
+ */
+const localToWidened = (
+  local: number,
+  rawStart: number,
+  rawEnd: number,
+  knot: { atProgress: number; atLocal: number } | null,
+): number => {
+  if (!knot) {
+    return rawStart + local * (rawEnd - rawStart);
+  }
+  if (local <= knot.atLocal) {
+    const t = knot.atLocal === 0 ? 0 : local / knot.atLocal;
+    return rawStart + t * (knot.atProgress - rawStart);
+  }
+  const t = (local - knot.atLocal) / (1 - knot.atLocal);
+  return knot.atProgress + t * (rawEnd - knot.atProgress);
 };
 
 const computeLayout = (projects: readonly Project[]): Layout => {
   const lastIndex = projects.length - 1;
+
+  const anchors = projects.map((p) => anchorsFor(p.media.length, BASE, EXTRA));
+
   const weights = projects.map((p, i) => {
-    let w = BASE_VH + (p.media.length - 1) * EXTRA_VH;
-    if (i === 0) w += PRE_BUFFER_VH;
-    if (i === lastIndex) w += POST_BUFFER_VH;
+    let w = BASE + (p.media.length - 1) * EXTRA;
+    if (i === 0) w += PRE_BUFFER;
+    if (i === lastIndex) w += POST_BUFFER;
     return w;
   });
 
   const rawRanges: { start: number; end: number }[] = [];
   let cursor = 0;
   for (let i = 0; i < weights.length; i++) {
-    if (i > 0) cursor -= OVERLAP_VH;
+    if (i > 0) cursor -= OVERLAP;
     rawRanges.push({ start: cursor, end: cursor + weights[i] });
     cursor += weights[i];
   }
 
-  // Total widened scroll = pre + content + post = section + viewport
-  const totalWidenedVh = cursor;
-  const sectionVh = totalWidenedVh - 100;
-  const stickyEngageProgress = PRE_BUFFER_VH / totalWidenedVh;
-  const stickyDisengageProgress = (totalWidenedVh - POST_BUFFER_VH) / totalWidenedVh;
+  const totalWidened = cursor;
+  // sticky-engaged section height = totalWidened - 1 viewport (the section, when pinned,
+  // occupies one viewport, and scrolls the remaining "widened" budget).
+  const sectionVh = Math.max(0, totalWidened - 1);
+  const stickyEngage = PRE_BUFFER;
+  const stickyDisengage = totalWidened - POST_BUFFER;
+  const stickyEngageProgress = stickyEngage / totalWidened;
+  const stickyDisengageProgress = stickyDisengage / totalWidened;
 
   const layers: LayerRange[] = rawRanges.map((r, i) => {
-    const startProgress = r.start / totalWidenedVh;
-    const endProgress = r.end / totalWidenedVh;
+    const startProgress = r.start / totalWidened;
+    const endProgress = r.end / totalWidened;
 
     if (i === 0) {
       return {
         inputRange: [startProgress, stickyEngageProgress, endProgress],
-        outputRange: [0, MAX_ENTER_END, 1],
+        outputRange: [0, anchors[0].pFirst, 1],
       };
     }
     if (i === lastIndex) {
       return {
         inputRange: [startProgress, stickyDisengageProgress, endProgress],
-        outputRange: [0, MIN_EXIT_START, 1],
+        outputRange: [0, anchors[lastIndex].pLast, 1],
       };
     }
     return {
@@ -77,12 +107,75 @@ const computeLayout = (projects: readonly Project[]): Layout => {
     };
   });
 
-  return { layers, sectionVh };
+  const snaps: Snap[] = [];
+  rawRanges.forEach((r, i) => {
+    const project = projects[i];
+    const slideCount = Math.max(1, project.media.length);
+    const projectAnchors = anchors[i];
+    const knot =
+      i === 0
+        ? { atProgress: stickyEngage, atLocal: projectAnchors.pFirst }
+        : i === lastIndex
+          ? { atProgress: stickyDisengage, atLocal: projectAnchors.pLast }
+          : null;
+
+    for (let j = 0; j < slideCount; j++) {
+      const peakLocal = peakProgressFor(j, slideCount, projectAnchors);
+      const widened = localToWidened(peakLocal, r.start, r.end, knot);
+      const topVh = Math.max(0, Math.min(sectionVh, widened - 0.5));
+      snaps.push({
+        topVh,
+        label: slideCount > 1 ? `${project.name} · slide ${j + 1}/${slideCount}` : project.name,
+      });
+    }
+  });
+
+  return { layers, anchors, sectionVh, snaps };
 };
 
 export const ProjectsStage = ({ projects }: ProjectsStageProps) => {
-  const { layers, sectionVh } = useMemo(() => computeLayout(projects), [projects]);
   const sectionRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+
+    const state = { topPassed: false, bottomActive: false };
+    const sync = () => {
+      document.documentElement.classList.toggle(
+        "snap-active",
+        state.topPassed && state.bottomActive,
+      );
+    };
+
+    const topObserver = new IntersectionObserver(
+      ([entry]) => {
+        state.topPassed = entry.isIntersecting;
+        sync();
+      },
+      { rootMargin: "0px 0px -100% 0px" },
+    );
+
+    const bottomObserver = new IntersectionObserver(
+      ([entry]) => {
+        state.bottomActive = entry.isIntersecting;
+        sync();
+      },
+      { rootMargin: "-100% 0px 0px 0px" },
+    );
+
+    topObserver.observe(el);
+    bottomObserver.observe(el);
+
+    return () => {
+      topObserver.disconnect();
+      bottomObserver.disconnect();
+      document.documentElement.classList.remove("snap-active");
+    };
+  }, []);
+
+  const { layers, anchors, sectionVh, snaps } = useMemo(() => computeLayout(projects), [projects]);
+
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start end", "end start"],
@@ -92,9 +185,17 @@ export const ProjectsStage = ({ projects }: ProjectsStageProps) => {
     <div
       ref={sectionRef}
       className="relative"
-      style={{ height: `${sectionVh}vh` }}
+      style={{ height: `${sectionVh * 100}vh` }}
       data-projects-stage
     >
+      {snaps.map((snap, i) => (
+        <div
+          key={`snap-${i}-${snap.label}`}
+          aria-hidden="true"
+          className="pointer-events-none absolute left-0 h-px w-px"
+          style={{ top: `${snap.topVh * 100}vh`, scrollSnapAlign: "center" }}
+        />
+      ))}
       <div className="sticky top-0 h-screen overflow-hidden">
         {projects.map((project, i) => (
           <ProjectLayer
@@ -104,6 +205,7 @@ export const ProjectsStage = ({ projects }: ProjectsStageProps) => {
             total={projects.length}
             inputRange={layers[i].inputRange}
             outputRange={layers[i].outputRange}
+            anchors={anchors[i]}
             sectionProgress={scrollYProgress}
           />
         ))}

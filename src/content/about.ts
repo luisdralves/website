@@ -6,6 +6,7 @@ export type AboutContent = {
   personalFacts: readonly {
     label: string;
     value: string;
+    cta?: { label: string; href: string };
   }[];
   transitionalStatement: string;
 };
@@ -23,6 +24,11 @@ export const about = {
     ],
   },
   personalFacts: [
+    {
+      label: "What I do",
+      value: "Senior frontend engineer, six years in the trade",
+      cta: { label: "CV", href: "/luisdralves-cv.pdf" },
+    },
     {
       label: "Based in",
       value: "Viana do Castelo, Portugal. Looking to relocate.",

@@ -5,6 +5,7 @@ import { type CSSProperties, useState } from "react";
 import type { Project } from "@/content/projects";
 import { DescriptionReveal } from "./description-reveal";
 import { HookReveal } from "./hook-reveal";
+import type { Anchors } from "./lifecycle";
 import { LinksRow } from "./links-row";
 import { Placard } from "./placard";
 import { TechKeyDeck } from "./tech-key-deck";
@@ -16,6 +17,7 @@ type ProjectLayerProps = {
   total: number;
   inputRange: number[];
   outputRange: number[];
+  anchors: Anchors;
   sectionProgress: MotionValue<number>;
 };
 
@@ -25,6 +27,7 @@ export const ProjectLayer = ({
   total,
   inputRange,
   outputRange,
+  anchors,
   sectionProgress,
 }: ProjectLayerProps) => {
   const localProgress = useTransform(sectionProgress, inputRange, outputRange, {
@@ -58,11 +61,24 @@ export const ProjectLayer = ({
       <div className="mx-auto grid w-full max-w-7xl desktop:grid-cols-2 grid-cols-1 items-center desktop:gap-12 gap-10 lg:gap-20">
         <div className={visualOnLeft ? "desktop:order-2" : "desktop:order-1"}>
           <div className="space-y-6">
-            <Placard index={index} total={total} localProgress={localProgress} />
-            <HookReveal text={project.hook} localProgress={localProgress} />
-            <DescriptionReveal text={project.description} localProgress={localProgress} />
-            <TechKeyDeck techStack={project.techStack} localProgress={localProgress} />
-            <LinksRow project={project} localProgress={localProgress} sideSign={contentSideSign} />
+            <Placard index={index} total={total} localProgress={localProgress} anchors={anchors} />
+            <HookReveal text={project.hook} localProgress={localProgress} anchors={anchors} />
+            <DescriptionReveal
+              text={project.description}
+              localProgress={localProgress}
+              anchors={anchors}
+            />
+            <TechKeyDeck
+              techStack={project.techStack}
+              localProgress={localProgress}
+              anchors={anchors}
+            />
+            <LinksRow
+              project={project}
+              localProgress={localProgress}
+              sideSign={contentSideSign}
+              anchors={anchors}
+            />
           </div>
         </div>
 
@@ -73,6 +89,7 @@ export const ProjectLayer = ({
             priority={index === 0}
             sideSign={visualSideSign}
             active={active}
+            anchors={anchors}
           />
         </div>
       </div>

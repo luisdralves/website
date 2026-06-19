@@ -19,7 +19,7 @@ const Digit = ({ value }: DigitProps) => {
     if (value === renderedValue || animatingRef.current) return;
 
     const delta = value - renderedValue;
-    // delta === 1: normal increment; delta === -9: rollover (9 → 0).
+    // delta === 1: normal increment; delta === -9: rollover from 9 to 0.
     const isSingleForwardStep = delta === 1 || delta === -9;
 
     if (!isSingleForwardStep || shouldReduce) {

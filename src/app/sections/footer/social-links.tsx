@@ -1,8 +1,13 @@
 "use client";
 
 import { m } from "motion/react";
+import type { FC, SVGProps } from "react";
+import DocumentIcon from "@/components/icons/document.svg";
+import GiteaIcon from "@/components/icons/gitea.svg";
+import GitHubIcon from "@/components/icons/github.svg";
+import LinkedInIcon from "@/components/icons/linkedin.svg";
+import SourceIcon from "@/components/icons/source.svg";
 import { useMagneticSpringHover } from "@/hooks/use-magnetic-spring-hover";
-import { resolveHost } from "@/lib/host-icons";
 
 type Link = {
   platform: string;
@@ -13,13 +18,20 @@ type SocialLinksProps = {
   links: readonly Link[];
 };
 
+const PLATFORM_ICONS: Record<string, FC<SVGProps<SVGSVGElement>>> = {
+  GitHub: GitHubIcon,
+  Gitea: GiteaIcon,
+  LinkedIn: LinkedInIcon,
+  CV: DocumentIcon,
+};
+
 const SocialLink = ({ link }: { link: Link }) => {
   const hover = useMagneticSpringHover<HTMLAnchorElement>({
     magnetStrength: 0.22,
     scaleAmount: 1.05,
     shadowElevation: 0,
   });
-  const { Icon } = resolveHost(link.url);
+  const Icon = PLATFORM_ICONS[link.platform] ?? SourceIcon;
 
   return (
     <m.a

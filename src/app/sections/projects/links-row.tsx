@@ -1,15 +1,16 @@
 "use client";
 
-import { easeIn, easeOut, type MotionValue, m, useTransform } from "motion/react";
+import { easeInOut, type MotionValue, m, useTransform } from "motion/react";
 import type { ReactNode } from "react";
 import type { Project } from "@/content/projects";
-import { linear, PHASES, stagger } from "./lifecycle";
+import { type Anchors, linear, phaseFor, stagger } from "./lifecycle";
 import { LiveLink, SourceLink } from "./source-link";
 
 type LinksRowProps = {
   project: Project;
   localProgress: MotionValue<number>;
   sideSign: -1 | 1;
+  anchors: Anchors;
 };
 
 type LinkWrapperProps = {
@@ -17,11 +18,19 @@ type LinkWrapperProps = {
   total: number;
   localProgress: MotionValue<number>;
   sideSign: -1 | 1;
+  anchors: Anchors;
   children: ReactNode;
 };
 
-const LinkWrapper = ({ index, total, localProgress, sideSign, children }: LinkWrapperProps) => {
-  const phase = stagger(PHASES.links, index, total, 0.5, true);
+const LinkWrapper = ({
+  index,
+  total,
+  localProgress,
+  sideSign,
+  anchors,
+  children,
+}: LinkWrapperProps) => {
+  const phase = stagger(phaseFor("links", anchors), index, total, 0.5, true);
   const { enterStart, enterEnd, exitStart, exitEnd } = phase;
   const offEdge = -40 * sideSign;
 
@@ -29,13 +38,13 @@ const LinkWrapper = ({ index, total, localProgress, sideSign, children }: LinkWr
     localProgress,
     [enterStart, enterEnd, exitStart, exitEnd],
     [0, 1, 1, 0],
-    { ease: [easeOut, linear, easeIn] },
+    { ease: [easeInOut, linear, easeInOut] },
   );
   const x = useTransform(
     localProgress,
     [enterStart, enterEnd, exitStart, exitEnd],
     [offEdge, 0, 0, offEdge],
-    { ease: [easeOut, linear, easeIn] },
+    { ease: [easeInOut, linear, easeInOut] },
   );
 
   return (
@@ -45,7 +54,7 @@ const LinkWrapper = ({ index, total, localProgress, sideSign, children }: LinkWr
   );
 };
 
-export const LinksRow = ({ project, localProgress, sideSign }: LinksRowProps) => {
+export const LinksRow = ({ project, localProgress, sideSign, anchors }: LinksRowProps) => {
   type Item = { key: string; node: ReactNode };
   const items: Item[] = [];
   if (project.liveUrl) {
@@ -66,6 +75,7 @@ export const LinksRow = ({ project, localProgress, sideSign }: LinksRowProps) =>
           total={items.length}
           localProgress={localProgress}
           sideSign={sideSign}
+          anchors={anchors}
         >
           {item.node}
         </LinkWrapper>

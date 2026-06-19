@@ -1,17 +1,18 @@
 "use client";
 
-import { easeIn, easeOut, type MotionValue, m, useTransform } from "motion/react";
-import { linear, PHASES, stagger } from "./lifecycle";
+import { easeInOut, type MotionValue, m, useTransform } from "motion/react";
+import { type Anchors, linear, phaseFor, stagger } from "./lifecycle";
 
 type HookWordProps = {
   word: string;
   index: number;
   total: number;
   localProgress: MotionValue<number>;
+  anchors: Anchors;
 };
 
-export const HookWord = ({ word, index, total, localProgress }: HookWordProps) => {
-  const phase = stagger(PHASES.hook, index, total, 0.55, true);
+export const HookWord = ({ word, index, total, localProgress, anchors }: HookWordProps) => {
+  const phase = stagger(phaseFor("hook", anchors), index, total, 0.55, true);
   const { enterStart, enterEnd, exitStart, exitEnd } = phase;
 
   const exitX = index % 2 === 0 ? -48 : 48;
@@ -22,25 +23,25 @@ export const HookWord = ({ word, index, total, localProgress }: HookWordProps) =
     localProgress,
     [enterStart, enterEnd, exitStart, exitEnd],
     [0, 1, 1, 0],
-    { ease: [easeOut, linear, easeIn] },
+    { ease: [easeInOut, linear, easeInOut] },
   );
   const y = useTransform(
     localProgress,
     [enterStart, enterEnd, exitStart, exitEnd],
     [88, 0, 0, exitY],
-    { ease: [easeOut, linear, easeIn] },
+    { ease: [easeInOut, linear, easeInOut] },
   );
   const x = useTransform(
     localProgress,
     [enterStart, enterEnd, exitStart, exitEnd],
     [0, 0, 0, exitX],
-    { ease: [easeOut, linear, easeIn] },
+    { ease: [easeInOut, linear, easeInOut] },
   );
   const rotate = useTransform(
     localProgress,
     [enterStart, enterEnd, exitStart, exitEnd],
     [4, 0, 0, exitRotate],
-    { ease: [easeOut, linear, easeIn] },
+    { ease: [easeInOut, linear, easeInOut] },
   );
 
   return (
