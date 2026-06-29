@@ -56,11 +56,15 @@ export const ProjectLayer = ({
     <m.div
       style={layerStyle}
       data-project-layer
-      className="absolute inset-0 flex items-center desktop:px-16 px-8 lg:px-24"
+      className="absolute inset-0 flex desktop:items-center desktop:px-16 px-8 lg:px-24"
     >
-      <div className="mx-auto grid w-full max-w-7xl desktop:grid-cols-2 grid-cols-1 items-center desktop:gap-12 gap-10 lg:gap-20">
-        <div className={visualOnLeft ? "desktop:order-2" : "desktop:order-1"}>
-          <div className="space-y-6">
+      <div className="mx-auto flex desktop:grid w-full max-w-7xl desktop:grid-cols-2 flex-col desktop:items-center desktop:gap-12 lg:gap-20">
+        <div
+          className={`desktop:block flex desktop:h-auto h-[62svh] items-center ${
+            visualOnLeft ? "desktop:order-2" : "desktop:order-1"
+          }`}
+        >
+          <div className="w-full desktop:space-y-6 space-y-4">
             <Placard index={index} total={total} localProgress={localProgress} anchors={anchors} />
             <HookReveal text={project.hook} localProgress={localProgress} anchors={anchors} />
             <DescriptionReveal
@@ -82,7 +86,11 @@ export const ProjectLayer = ({
           </div>
         </div>
 
-        <div className={visualOnLeft ? "desktop:order-1" : "desktop:order-2"}>
+        <div
+          className={`desktop:block flex desktop:h-auto h-[38svh] items-center justify-center ${
+            visualOnLeft ? "desktop:order-1" : "desktop:order-2"
+          }`}
+        >
           <VisualShowcase
             media={project.media}
             localProgress={localProgress}

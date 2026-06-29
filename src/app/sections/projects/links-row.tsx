@@ -67,7 +67,7 @@ export const LinksRow = ({ project, localProgress, sideSign, anchors }: LinksRow
   if (items.length === 0) return null;
 
   return (
-    <div className="flex flex-wrap items-center gap-x-6 gap-y-3 pt-4">
+    <div className="flex flex-wrap items-center gap-x-6 gap-y-3 desktop:pt-4 pt-2">
       {items.map((item, i) => (
         <LinkWrapper
           key={item.key}

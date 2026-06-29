@@ -30,7 +30,7 @@ export const HookReveal = ({ text, localProgress, anchors }: HookRevealProps) =>
   const { tokens, wordCount } = tokenize(text);
 
   return (
-    <h3 className="font-heading font-semibold desktop:text-5xl text-4xl leading-[1.1] lg:text-6xl">
+    <h3 className="font-heading font-semibold desktop:text-5xl text-[clamp(1.25rem,6vw,2.25rem)] leading-[1.1] lg:text-6xl">
       {tokens.map((token, i) => {
         if (token.kind === "space") {
           // biome-ignore lint/suspicious/noArrayIndexKey: token positions are stable for a given hook string

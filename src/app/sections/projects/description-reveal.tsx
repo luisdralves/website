@@ -33,7 +33,7 @@ export const DescriptionReveal = ({ text, localProgress, anchors }: DescriptionR
   return (
     <m.p
       style={{ opacity, y, filter }}
-      className="max-w-xl font-body desktop:text-lg text-base text-foreground/70 leading-relaxed"
+      className="max-w-xl font-body desktop:text-lg text-[clamp(0.8rem,3.6vw,1rem)] text-foreground/70 leading-relaxed"
     >
       {text}
     </m.p>
