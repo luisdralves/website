@@ -3,10 +3,11 @@
 import { useScroll } from "motion/react";
 import { useEffect, useMemo, useRef } from "react";
 import type { Project } from "@/content/projects";
+import { DescriptionBackdrop, type DescriptionBand } from "./description-backdrop";
 import { type Anchors, anchorsFor, peakProgressFor } from "./lifecycle";
 import { ProjectLayer } from "./project-layer";
 
-// All values are in viewports (1.0 = 100vh). Dimensionless ratios.
+// All values are in viewports (1.0 = 100svh). Dimensionless ratios.
 const BASE = 0.95;
 const EXTRA = 0.6;
 const OVERLAP = 0.2;
@@ -32,6 +33,8 @@ type Layout = {
   anchors: Anchors[];
   sectionVh: number;
   snaps: Snap[];
+  bands: DescriptionBand[];
+  totalVh: number;
 };
 
 /**
@@ -130,7 +133,21 @@ const computeLayout = (projects: readonly Project[]): Layout => {
     }
   });
 
-  return { layers, anchors, sectionVh, snaps };
+  // Band boundaries sit at the midpoint of each adjacent pair's scroll overlap, so each project
+  // owns the contiguous scroll span where it is the featured layer, and adjacent bands share an edge.
+  const boundaries = [0];
+  for (let i = 1; i < rawRanges.length; i++) {
+    boundaries.push((rawRanges[i - 1].end + rawRanges[i].start) / 2);
+  }
+  boundaries.push(totalWidened);
+
+  const bands: DescriptionBand[] = projects.map((p, i) => ({
+    description: p.description,
+    accent: p.accent,
+    heightVh: (boundaries[i + 1] - boundaries[i]) * 100,
+  }));
+
+  return { layers, anchors, sectionVh, snaps, bands, totalVh: totalWidened * 100 };
 };
 
 export const ProjectsStage = ({ projects }: ProjectsStageProps) => {
@@ -174,7 +191,10 @@ export const ProjectsStage = ({ projects }: ProjectsStageProps) => {
     };
   }, []);
 
-  const { layers, anchors, sectionVh, snaps } = useMemo(() => computeLayout(projects), [projects]);
+  const { layers, anchors, sectionVh, snaps, bands, totalVh } = useMemo(
+    () => computeLayout(projects),
+    [projects],
+  );
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -185,18 +205,19 @@ export const ProjectsStage = ({ projects }: ProjectsStageProps) => {
     <div
       ref={sectionRef}
       className="relative"
-      style={{ height: `${sectionVh * 100}vh` }}
+      style={{ height: `${sectionVh * 100}svh` }}
       data-projects-stage
     >
+      <DescriptionBackdrop bands={bands} totalVh={totalVh} />
       {snaps.map((snap, i) => (
         <div
           key={`snap-${i}-${snap.label}`}
           aria-hidden="true"
           className="pointer-events-none absolute left-0 h-px w-px"
-          style={{ top: `${snap.topVh * 100}vh`, scrollSnapAlign: "center" }}
+          style={{ top: `${snap.topVh * 100}svh`, scrollSnapAlign: "center" }}
         />
       ))}
-      <div className="sticky top-0 h-screen overflow-hidden">
+      <div className="sticky top-0 h-svh overflow-hidden">
         {projects.map((project, i) => (
           <ProjectLayer
             key={project.name}
