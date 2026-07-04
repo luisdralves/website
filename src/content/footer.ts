@@ -10,8 +10,14 @@ export type FooterContent = {
   errorMessage: string;
 };
 
+import { person } from "@/content/person";
+
 export const footer = {
   socialLinks: [
+    {
+      platform: "Email",
+      url: `mailto:${person.email}`,
+    },
     {
       platform: "GitHub",
       url: "https://github.com/luisdralves",

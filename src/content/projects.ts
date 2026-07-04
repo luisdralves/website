@@ -25,6 +25,7 @@ export type Project = {
   description: string;
   techStack: string[];
   liveUrl?: string;
+  os?: string;
   sources?: ProjectSource[];
   media: ProjectMedia[];
   /** OKLCH "L C H" triplet (space-separated, no parentheses). Bound as --project-accent. */
@@ -162,6 +163,7 @@ export const projects = [
     description:
       "15+ services on hardware I own, behind a reverse proxy. Email, photos, code, media, dashboards, personal projects. A repurposed gaming desktop that ran out of room in two different ways: no free space left on its disks and no free bays left inside the case. Shown here mid-upgrade. Don't worry about the cables, they don't look like this now :)",
     techStack: ["Linux", "Docker", "Caddy"],
+    os: "Linux",
     media: [
       {
         type: "image",

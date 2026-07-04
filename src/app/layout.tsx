@@ -3,6 +3,8 @@ import { Courier_Prime, Outfit, Space_Grotesk } from "next/font/google";
 import type { ReactNode } from "react";
 import "./globals.css";
 import { MotionProvider } from "@/components/motion-provider";
+import { graph } from "@/lib/schema";
+import { SITE_DESCRIPTION, SITE_TITLE, SITE_URL } from "@/content/site";
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -22,11 +24,6 @@ const courierPrime = Courier_Prime({
   variable: "--font-mono",
   display: "swap",
 });
-
-const SITE_URL = "https://luisdralves.dev";
-const SITE_TITLE = "luisdralves";
-const SITE_DESCRIPTION =
-  "Personal site of Luís Alves. Building systems that connect, things to preserve, new ways to see familiar things. Easier to show than tell.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -55,21 +52,6 @@ export const metadata: Metadata = {
     images: ["/og-image.png"],
   },
   robots: { index: true, follow: true },
-};
-
-const personSchema = {
-  "@context": "https://schema.org",
-  "@type": "Person",
-  name: "Luís Alves",
-  alternateName: "luisdralves",
-  url: SITE_URL,
-  sameAs: [
-    "https://github.com/luisdralves",
-    "https://gitea.luisdralves.dev/luis",
-    "https://linkedin.com/in/luisdralves",
-  ],
-  jobTitle: "Software Engineer",
-  description: SITE_DESCRIPTION,
 };
 
 export default function RootLayout({
@@ -121,7 +103,7 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           // biome-ignore lint/security/noDangerouslySetInnerHtml: required for JSON-LD schema markup
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(graph) }}
         />
         <MotionProvider>{children}</MotionProvider>
       </body>

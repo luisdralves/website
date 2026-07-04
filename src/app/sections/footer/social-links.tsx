@@ -6,6 +6,7 @@ import DocumentIcon from "@/components/icons/document.svg";
 import GiteaIcon from "@/components/icons/gitea.svg";
 import GitHubIcon from "@/components/icons/github.svg";
 import LinkedInIcon from "@/components/icons/linkedin.svg";
+import MailIcon from "@/components/icons/mail.svg";
 import SourceIcon from "@/components/icons/source.svg";
 import { useMagneticSpringHover } from "@/hooks/use-magnetic-spring-hover";
 
@@ -19,6 +20,7 @@ type SocialLinksProps = {
 };
 
 const PLATFORM_ICONS: Record<string, FC<SVGProps<SVGSVGElement>>> = {
+  Email: MailIcon,
   GitHub: GitHubIcon,
   Gitea: GiteaIcon,
   LinkedIn: LinkedInIcon,
@@ -41,7 +43,7 @@ const SocialLink = ({ link }: { link: Link }) => {
       href={link.url}
       target="_blank"
       rel="noreferrer noopener"
-      className="inline-flex items-center gap-2 rounded-full border border-foreground/15 bg-foreground/[0.02] px-5 py-2.5 font-body text-foreground/80 text-sm transition-colors hover:border-accent-cyan/40 hover:text-accent-cyan"
+      className="inline-flex items-center gap-2 rounded-full border border-foreground/15 bg-foreground/2 px-5 py-2.5 font-body text-foreground/80 text-sm transition-colors hover:border-accent-cyan/40 hover:text-accent-cyan"
     >
       <Icon className="size-4" />
       <span>{link.platform}</span>
