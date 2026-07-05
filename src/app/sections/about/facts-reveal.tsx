@@ -4,6 +4,7 @@ import { m, type Variants } from "motion/react";
 import ArrowUpRightIcon from "@/components/icons/arrow-up-right.svg";
 import DocumentIcon from "@/components/icons/document.svg";
 import { useMagneticSpringHover } from "@/hooks/use-magnetic-spring-hover";
+import { springGentle } from "@/lib/motion";
 
 type Fact = {
   label: string;
@@ -30,7 +31,7 @@ const itemVariants: Variants = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.55, ease: [0.22, 0.61, 0.36, 1] },
+    transition: springGentle,
   },
 };
 

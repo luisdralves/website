@@ -1,4 +1,4 @@
-# luisdralves
+# luisdralves.dev
 
 Despite immensely enjoying thinking about and implementing ideas and personal projects, my personal website had been stale since university. That's what this iteration was born out of, with some of the things I picked up along the way.
 
@@ -6,7 +6,6 @@ Despite immensely enjoying thinking about and implementing ideas and personal pr
 
 - Next.js 16 (RSC-first)
 - motion.dev
-- react-three-fiber
 - Tailwind CSS 4
 - better-sqlite3
 - Biome
@@ -17,13 +16,9 @@ Copy `.env.example` to `.env` and configure:
 
 | Variable | Description |
 |----------|-------------|
-| `IMMICH_API_URL` | Immich API base URL (e.g., `https://my.immich.app/api`) |
-| `IMMICH_API_KEY` | API key with scopes: `album.read`, `asset.read`, `asset.download` |
-| `IMMICH_ALBUM_ID` | UUID of the album to display in the photography section |
-
-## Server Requirements
-
-- [exiftool](https://exiftool.org/) (image metadata stripping)
+| `RATE_MY_SHOTS_URL` | Base URL of the rate-my-shots instance that feeds the photography section (photos, thumbnails, and EXIF) |
+| `HOST_PORT` | Host port the app is published on (default `3000`) |
+| `DATA_DIR` | Host directory bind-mounted to `/app/data`, where the SQLite counter DB lives (default `./data`) |
 
 ## Development
 

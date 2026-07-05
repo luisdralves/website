@@ -1,10 +1,4 @@
-import type {
-  Graph,
-  Person,
-  ProfilePage,
-  SoftwareApplication,
-  WebSite,
-} from "schema-dts";
+import type { Graph, Person, ProfilePage, SoftwareApplication, WebSite } from "schema-dts";
 import { footer } from "@/content/footer";
 import { person } from "@/content/person";
 import { type Project, projects } from "@/content/projects";
@@ -14,9 +8,7 @@ const PERSON_ID = `${SITE_URL}/#person`;
 const WEBSITE_ID = `${SITE_URL}/#website`;
 const WEBPAGE_ID = `${SITE_URL}/#webpage`;
 
-const sameAs = footer.socialLinks
-  .map((link) => link.url)
-  .filter((url) => url.startsWith("http"));
+const sameAs = footer.socialLinks.map((link) => link.url).filter((url) => url.startsWith("http"));
 
 const websiteNode: WebSite = {
   "@type": "WebSite",

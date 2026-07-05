@@ -5,6 +5,7 @@ export type FooterContent = {
   }[];
   totalVisitsLabel: string;
   counterPrompt: string;
+  contactPrompt: string;
   excessClickMessage: string;
   rateLimitMessage: string;
   errorMessage: string;
@@ -37,6 +38,7 @@ export const footer = {
   ],
   totalVisitsLabel: "Total visits:",
   counterPrompt: "Please kindly increase the counter before you leave.",
+  contactPrompt: "Say hello.",
   excessClickMessage: "Please don't increase it too much.",
   rateLimitMessage: "Slow down there, speedster.",
   errorMessage: "Counter is taking a nap.",

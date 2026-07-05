@@ -3,8 +3,8 @@ import { Courier_Prime, Outfit, Space_Grotesk } from "next/font/google";
 import type { ReactNode } from "react";
 import "./globals.css";
 import { MotionProvider } from "@/components/motion-provider";
-import { graph } from "@/lib/schema";
 import { SITE_DESCRIPTION, SITE_TITLE, SITE_URL } from "@/content/site";
+import { graph } from "@/lib/schema";
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],

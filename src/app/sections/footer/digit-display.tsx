@@ -29,8 +29,10 @@ const Digit = ({ value }: DigitProps) => {
 
     animatingRef.current = true;
     animate(y, SLIDE_TARGET, {
-      duration: 0.45,
-      ease: [0.22, 0.61, 0.36, 1],
+      type: "spring",
+      stiffness: 500,
+      damping: 28,
+      mass: 1,
       onComplete: () => {
         y.set(SLIDE_IDLE);
         setRenderedValue(value);

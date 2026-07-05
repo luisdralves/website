@@ -18,7 +18,7 @@ type PhotoModalProps = {
 };
 
 const chromeButtonClasses =
-  "inline-flex size-12 cursor-pointer items-center justify-center rounded-full border border-foreground/15 bg-foreground/3 text-foreground/80 backdrop-blur-sm transition-colors hover:border-accent-cyan/60 hover:text-accent-cyan disabled:cursor-default disabled:opacity-30 disabled:hover:border-foreground/15 disabled:hover:text-foreground/80";
+  "z-10 inline-flex size-12 cursor-pointer items-center justify-center rounded-full border border-foreground/15 bg-foreground/3 text-foreground/80 backdrop-blur-sm transition-colors hover:border-accent-cyan/60 hover:text-accent-cyan disabled:cursor-default disabled:opacity-30 disabled:hover:border-foreground/15 disabled:hover:text-foreground/80";
 
 const FOCUSABLE_SELECTOR = 'button:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])';
 
@@ -158,23 +158,29 @@ export const PhotoModal = ({
           </button>
 
           <div className="flex h-full w-full flex-col items-center gap-4">
-            <div className="flex min-h-0 w-full flex-1 items-center justify-center">
-              <a
-                href={`${apiUrl}/assets/${photo.id}`}
-                target="_blank"
-                rel="noreferrer noopener"
-                onClick={(e) => e.stopPropagation()}
-                aria-label="Open photo details"
-                className="contents"
-              >
-                {/* biome-ignore lint/performance/noImgElement: viewer image is served pre-optimized by rate-my-shots */}
-                <img
+            <div className="relative flex min-h-0 w-full flex-1 items-center justify-center">
+              <AnimatePresence initial={false}>
+                <m.a
                   key={photo.id}
-                  src={`${apiUrl}/img/${photo.id}?size=preview`}
-                  alt=""
-                  className="max-h-full max-w-full cursor-pointer object-contain"
-                />
-              </a>
+                  href={`${apiUrl}/assets/${photo.id}`}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  onClick={(e) => e.stopPropagation()}
+                  aria-label="Open photo details"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="pointer-events-none absolute inset-0 flex items-center justify-center"
+                >
+                  {/* biome-ignore lint/performance/noImgElement: viewer image is served pre-optimized by rate-my-shots */}
+                  <img
+                    src={`${apiUrl}/img/${photo.id}?size=preview`}
+                    alt=""
+                    className="pointer-events-auto max-h-full max-w-full cursor-pointer object-contain"
+                  />
+                </m.a>
+              </AnimatePresence>
             </div>
             {/* biome-ignore lint/a11y/noStaticElementInteractions: stops clicks on chrome from closing the modal */}
             {/* biome-ignore lint/a11y/useKeyWithClickEvents: defensive click absorber, no keyboard semantics needed */}
