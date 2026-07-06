@@ -2,9 +2,9 @@
 
 import { AnimatePresence, m } from "motion/react";
 import { useEffect, useRef } from "react";
+import { ExternalLink } from "@/components/external-link";
 import ArrowLeftIcon from "@/components/icons/arrow-left.svg";
 import ArrowRightIcon from "@/components/icons/arrow-right.svg";
-import ArrowUpRightIcon from "@/components/icons/arrow-up-right.svg";
 import CloseIcon from "@/components/icons/close.svg";
 import { formatExifLine } from "./exif";
 import type { PhotoItem } from "./types";
@@ -188,16 +188,13 @@ export const PhotoModal = ({
               {lensName && <p className="font-mono text-foreground/80 text-xs">{lensName}</p>}
               {exifLine && <p className="font-mono text-foreground/55 text-xs">{exifLine}</p>}
             </div>
-            <a
+            <ExternalLink
               href={`${apiUrl}/assets/${photo.id}`}
-              target="_blank"
-              rel="noreferrer noopener"
               onClick={(e) => e.stopPropagation()}
-              className="group inline-flex items-center gap-1.5 font-body text-foreground/70 text-sm transition-colors hover:text-accent-cyan"
+              className="font-body text-foreground/70 text-sm"
             >
               <span>Details</span>
-              <ArrowUpRightIcon className="group-hover:-translate-y-0.5 size-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
-            </a>
+            </ExternalLink>
           </div>
         </m.div>
       ) : null}

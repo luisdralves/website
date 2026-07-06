@@ -1,4 +1,5 @@
 export const SITE_URL = "https://luisdralves.dev";
+export const SITE_REPO = "https://gitea.luisdralves.dev/luis/website";
 export const SITE_TITLE = "luisdralves";
 export const SITE_DESCRIPTION =
   "Hi, Luís here. Welcome to my personal website. I'm a senior frontend engineer, six years in. I build tactile, slightly obsessive web experiments as well as practical solutions, and enjoy self-hosting anything that's critical to me, or just convenient.";
