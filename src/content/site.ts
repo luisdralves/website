@@ -2,7 +2,7 @@ export const SITE_URL = "https://luisdralves.dev";
 export const SITE_REPO = "https://gitea.luisdralves.dev/luis/website";
 export const SITE_TITLE = "luisdralves";
 export const SITE_DESCRIPTION =
-  "Hi, Luís here. Welcome to my personal website. I'm a senior frontend engineer, six years in. I build tactile, slightly obsessive web experiments as well as practical solutions, and enjoy self-hosting anything that's critical to me, or just convenient.";
+  "Hi, Luís here. I'm a senior frontend engineer, six years in. I build good things for work, and bad things for me (bad ideas deserve love too).";
 
 export const SITE_DESCRIPTION_OBJECTIVE =
   "Luís Alves is a senior frontend engineer with six years of experience. He builds tactile web experiments as well as practical solutions, and self-hosts both his own projects and the critical services he depends on.";
