@@ -105,6 +105,33 @@ export const projects = [
     accent: "0.78 0.13 90",
   },
   {
+    name: "fizalgo",
+    hook: "Bring the receipts to your next argument.",
+    description:
+      "A household chore tracker with a bit of gamification. Log who did what, when, and with how much effort. Each finished task earns XP and drops down a queue that ranks chores by urgency. Track your XP over time.",
+    techStack: ["Next.js", "TypeScript", "PostgreSQL", "Drizzle"],
+    liveUrl: "https://fizalgo.luisdralves.dev",
+    sources: [{ url: "https://gitea.luisdralves.dev/luis/fizalgo" }],
+    media: [
+      {
+        type: "image",
+        src: "/images/projects/fizalgo/stats.png",
+        alt: "Per-person XP, an evolution chart, and recent history",
+      },
+      {
+        type: "image",
+        src: "/images/projects/fizalgo/next.png",
+        alt: "The ranked queue of due tasks",
+      },
+      {
+        type: "image",
+        src: "/images/projects/fizalgo/register.png",
+        alt: "Logging a session: who did it, when, and which tasks",
+      },
+    ],
+    accent: "0.72 0.11 142",
+  },
+  {
     name: "places-ive-been-in",
     hook: "Putting memories on the map",
     description:
